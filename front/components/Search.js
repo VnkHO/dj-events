@@ -24,7 +24,6 @@ export default function Search() {
           onChange={(event) => setTerm(event?.target?.value)}
           placeholder="Search Events"
         />
-        {/* <button type="submit">Submit</button> */}
       </form>
     </div>
   )

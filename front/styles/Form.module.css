@@ -1,0 +1,39 @@
+.form label {
+  display: block;
+}
+
+.form input {
+  width: 100%;
+  height: 4rem;
+  padding: 0.5rem;
+}
+
+.form textarea {
+  width: 100%;
+  height: 15rem;
+}
+
+.form input[type='submit'] {
+  display: block;
+  width: 100%;
+  margin: 2rem 0 3rem;
+}
+
+.form .file {
+  border: 1px #ccc solid;
+  background-color: #f4f4f4;
+  padding: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
