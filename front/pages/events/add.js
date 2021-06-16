@@ -4,6 +4,9 @@ import Link from 'next/link'
 
 import {API_URL} from '@/config/index'
 
+import {ToastContainer, toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 import Layout from '@/components/Layout'
 
 import styles from '@/styles/Form.module.css'
@@ -21,9 +24,33 @@ export default function AddEventsPages() {
 
   const router = useRouter()
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     console.log('VALUES', values)
+
+    // Validation
+    const hasEmptyFields = Object.values(values).some(
+      (element) => element === '',
+    )
+
+    if (hasEmptyFields) {
+      toast.error('Please fill in all fields')
+    }
+
+    const response = await fetch(`${API_URL}/events`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    })
+
+    if (!response?.ok) {
+      toast?.error('Something Went Wrong!')
+    } else {
+      const evt = await response.json()
+      router.push(`/events/${evt?.slug}`)
+    }
   }
 
   const handleInputChange = (event) => {
@@ -40,6 +67,8 @@ export default function AddEventsPages() {
         <a>{'<'} Go Back</a>
       </Link>
       <h1>Add Event</h1>
+
+      <ToastContainer />
 
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.grid}>
