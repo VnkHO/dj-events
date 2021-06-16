@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import Layout from '@/components/Layout'
 import Modal from '@/components/Modal'
+import ImageUpload from '@/components/ImageUpload'
 
 import styles from '@/styles/Form.module.css'
 
@@ -70,6 +71,14 @@ export default function EditEventPage({evt}) {
       ...values,
       [name]: value,
     })
+  }
+
+  const imageUploaded = async (event) => {
+    const response = await fetch(`${API_URL}/events/${evt?.id}`)
+    const data = await response?.json()
+
+    setImagePreview(data?.image?.formats?.thumbnail?.url)
+    setShowModal(false)
   }
 
   return (
@@ -180,7 +189,7 @@ export default function EditEventPage({evt}) {
       </div>
 
       <Modal show={showModal} onClose={() => setShowModal(false)}>
-        IMAGE UPLOADED
+        <ImageUpload evtId={evt?.id} imageUploaded={imageUploaded} />
       </Modal>
     </Layout>
   )
