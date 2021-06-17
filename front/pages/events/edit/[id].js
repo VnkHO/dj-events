@@ -38,7 +38,6 @@ export default function EditEventPage({evt}) {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    console.log('VALUES', values)
 
     // Validation
     const hasEmptyFields = Object.values(values).some(
@@ -195,9 +194,9 @@ export default function EditEventPage({evt}) {
   )
 }
 
-export async function getServerSideProps({params: {id}}) {
+export async function getServerSideProps({params: {id}, req}) {
   const response = await fetch(`${API_URL}/events/${id}`)
-  const evt = await response.json()
+  const evt = await response?.json()
 
   return {
     props: {

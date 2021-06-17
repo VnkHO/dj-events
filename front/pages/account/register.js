@@ -20,6 +20,8 @@ export default function RegisterPage() {
 
   const {register, error} = useContext(AuthContext)
 
+  useEffect(() => error && toast?.error(error), [])
+
   const handleSubmit = (event) => {
     event.preventDefault()
 
@@ -29,6 +31,7 @@ export default function RegisterPage() {
     }
 
     register({username, email, password})
+    console.log('user', username)
   }
 
   return (
@@ -78,7 +81,7 @@ export default function RegisterPage() {
           </div>
 
           <button type="submit" className="btn" style={{width: '100%'}}>
-            Login
+            Register
           </button>
         </form>
 
