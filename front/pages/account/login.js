@@ -1,4 +1,5 @@
 import {useState, useEffect, useContext} from 'react'
+import AuthContext from '@/context/AuthContext'
 import Link from 'next/link'
 
 import {FaUser} from 'react-icons/fa'
@@ -14,9 +15,11 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const {login, error} = useContext(AuthContext)
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log({email, password})
+    login({email, password})
   }
 
   return (
