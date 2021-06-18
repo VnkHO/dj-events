@@ -11,6 +11,9 @@ import {FaPencilAlt, FaTimes} from 'react-icons/fa'
 
 import Layout from '@/components/Layout'
 
+// for Map
+// import EventMap from '@/components/EventMap'
+
 import styles from '@/styles/Event.module.css'
 
 export default function EventPage({evt}) {
@@ -45,6 +48,8 @@ export default function EventPage({evt}) {
 
         <h3>Venue : {evt?.venue}</h3>
         <p>{evt?.adresse}</p>
+
+        {/* <EventMap evt={evt} /> */}
 
         <Link href={`/events`}>
           <a className={styles.back}> {'<'} Go Back</a>
