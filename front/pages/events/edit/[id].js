@@ -3,6 +3,8 @@ import {useRouter} from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
 
+import {parseCookies} from '@/helpers/index'
+
 import {API_URL} from '@/config/index'
 
 import {format} from 'date-fns'
@@ -17,7 +19,7 @@ import ImageUpload from '@/components/ImageUpload'
 
 import styles from '@/styles/Form.module.css'
 
-export default function EditEventPage({evt}) {
+export default function EditEventPage({evt, token}) {
   const [values, setValues] = useState({
     name: evt?.name,
     performers: evt?.performers,
@@ -52,11 +54,17 @@ export default function EditEventPage({evt}) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(values),
     })
 
     if (!response?.ok) {
+      if (response?.status === 403 || response?.status === 401) {
+        toast?.error(`Unauthorized`)
+        return
+      }
+
       toast?.error('Something Went Wrong!')
     } else {
       const evt = await response.json()
@@ -81,11 +89,11 @@ export default function EditEventPage({evt}) {
   }
 
   return (
-    <Layout title="Add New Event">
+    <Layout title="Update New Event">
       <Link href="/events">
         <a>{'<'} Go Back</a>
       </Link>
-      <h1>Add Event</h1>
+      <h1>Update Event</h1>
 
       <ToastContainer />
 
@@ -166,7 +174,7 @@ export default function EditEventPage({evt}) {
         </div>
 
         <button style={{width: '100%'}} className={'btn'} type="submit">
-          Add Event
+          Update Event
         </button>
       </form>
 
@@ -188,19 +196,25 @@ export default function EditEventPage({evt}) {
       </div>
 
       <Modal show={showModal} onClose={() => setShowModal(false)}>
-        <ImageUpload evtId={evt?.id} imageUploaded={imageUploaded} />
+        <ImageUpload
+          evtId={evt?.id}
+          imageUploaded={imageUploaded}
+          token={token}
+        />
       </Modal>
     </Layout>
   )
 }
 
 export async function getServerSideProps({params: {id}, req}) {
+  const {token} = parseCookies(req)
   const response = await fetch(`${API_URL}/events/${id}`)
   const evt = await response?.json()
 
   return {
     props: {
       evt,
+      token,
     },
   }
 }
